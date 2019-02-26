@@ -1,0 +1,57 @@
+﻿@model SibersTest.Web.Models.ProjectListViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div>
+    <strong>Сортировать по:</strong>
+    @Html.DropDownList("sortby", Model.SortBy, new { @onchange = "ProjectsList();" })
+    <strong>Фильтровать по приоритету:</strong>
+    @Html.DropDownList("filterbypriority", Model.FilterByPriority, new { @onchange = "ProjectsList();" })
+</div>
+<div>
+    <strong>Фильтровать по дате начала проекта:</strong>
+    <br />
+    <strong>От:</strong>
+    @Html.TextBox("filterdate1", Model.FilterByDate1, new { @type = "date", @onchange = "ProjectsList();" })
+    <strong>До:</strong>
+    @Html.TextBox("filterdate2", Model.FilterByDate2, new { @type = "date", @onchange = "ProjectsList();" })
+</div>
+<hr />
+<p>
+    @Html.ActionLink("Создать новый проект", "Create")
+</p>
+
+<div>
+
+    @if (Model.ProjectsViewModel.Count() == 0)
+    {
+        <div>
+            No results found
+        </div>
+    }
+    else
+    {
+        @Html.Partial("_ProjectsList", Model.ProjectsViewModel)
+    }
+</div>
+
+<script type="text/javascript">
+
+    function ProjectsList() {
+        var sortby = $("#sortby").val();
+        var filterbypriority = $("#filterbypriority").val();
+        var filterdate1 = $("#filterdate1").val();
+        var filterdate2 = $("#filterdate2").val();
+        var ref = "/Project/Index?sortBy=" + sortby + "&filterByPriority=" + filterbypriority;
+        if (filterdate1 != '')
+            ref += "&filterDate1=" + filterdate1
+        if (filterdate2 != '')
+            ref += "&filterDate2=" + filterdate2
+        
+        document.location.href = ref;
+    }
+</script>
